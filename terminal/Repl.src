@@ -1,0 +1,56 @@
+import_code("./Terminal")
+
+Repl = {}
+
+Repl.print = function (msg)
+    print(msg)
+end function
+
+Repl.dangerPrint = function (msg)
+    print(msg)
+end function
+
+
+// Repl.print("<color=""red"">Welcome to TacOS</color>")
+
+Repl.input = ""
+
+Repl.run = function()
+    return
+    while true
+        clear_screen()
+        prompt = active_user+"@"+ "" +"~> " + Repl.input
+        input = user_input(prompt, false, true)
+        if input == Terminal.EnterKey then
+            clear_screen()
+            return Repl.exec(Repl.input)
+            // Repl.input = ""
+        else
+            Repl.input = Repl.input + input
+        end if
+    end while
+end function
+/*
+Repl.UserEvents = {
+    "enter": Terminal.EnterKey,
+    "backspace": ""
+}
+Repl.print(Repl.UserEvents)
+*/
+
+Repl.exec = function(input)
+    print("exec! "+input)
+    return
+    command = input.pull()
+    args = input
+    
+    if Command.indexes.includes(command) then
+        if args then
+            Command[command](args)
+        else
+            Command[command]()
+        end if
+    else
+        print("command not found")
+    end if
+end function

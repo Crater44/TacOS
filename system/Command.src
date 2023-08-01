@@ -1,0 +1,58 @@
+exports = get_custom_object
+
+Command = {}
+
+Command.ls = function(arg)
+	return "ls working"+arg
+end function
+
+Command.scan_remote_libs = function(args)
+	
+	if not args[0] and not args[1] then
+		Repl.dangerPrint("arguments: ip or port not found")
+		return true
+	end if
+ 	
+	address = args[0]
+	port = args[1]
+
+    net_session = metaxploit.net_use( address, port )
+
+    if not net_session then exit("Error: can't connect to net session")
+
+    metaxploit = globals.metaxploit
+    metaLib = net_session.dump_lib
+
+    if not metaLib then exit("Error: can't get metaLib")
+    print(metaLib.indexes)
+    exploits = {}
+    exploits.lib_name = metaLib.lib_name
+    exploits.version = metaLib.version
+    exploits.memorys = {}
+    memorys = metaxploit.scan(metaLib)
+    for memory in memorys
+        addresses = metaxploit.scan_address(metaLib, memory).split("Unsafe check:")
+        exploits.memorys[memory] = []
+        for address in addresses
+            if address == addresses[0] then continue
+            value = address[address.indexOf("<b>")+3:address.indexOf("</b>")]
+            value = value.replace("\n", "")
+            exploits.memorys[memory] = exploits.memorys[memory] + [value]
+        end for
+    end for
+	print("found: "+exploits)
+end function
+
+Command._execExploit = function ()
+
+end function
+
+Command.exit = function()
+	return exit("<color=orange>Already finished your TacOs?")
+end function
+
+exports.Command = Command
+
+
+
+// {"Name": "ls","Description": "List directories.","Args": "[l/a]","Shell":false}

@@ -1,0 +1,43 @@
+import_code("./TestSuite")
+
+TestSuite.importSource(function()
+    import_code("../polyfills/ListPolyfills")
+end function)
+
+TestSuite.runCases({
+    "Map should modify": function()
+        array = [1,2]
+        array.map(function(item) 
+            return item + 2
+        end function)
+        
+        return TestSuite.shouldBeEqual(array, [3,4])
+        //return (typeof(array) == "list" and array[0] == 3 and array[1] == 4)
+    end function,
+    
+    "Map should return array": function()
+        array = [1].map(function(item) 
+            return item + 2
+        end function)
+        return (typeof(array) == "list" and array[0] == 3)
+    end function,
+    
+    "Filter list method": function()
+        array = [1, 2, 3].filter(function(item) 
+            return item == 2
+        end function)
+        return (typeof(array) == "list" and array.len == 1 and array[0] == 2)
+    end function,
+    
+    "Filter should return array": function()
+        array = [1].filter(function(item) 
+            return item == 1
+        end function)
+        return (typeof(array) == "list" and array.len == 1)
+    end function,
+    
+    "Includes should return a correct boolean": function()
+        array = [1,2,3]
+        return array.includes(3) and not array.includes("test value")
+    end function,
+})

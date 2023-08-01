@@ -1,0 +1,11 @@
+import_code("./polyfills/ListPolyfills")
+import_code("./system/Command")
+import_code("./terminal/Repl")
+
+// metaxploit = include_lib("/lib/metaxploit.so")
+
+print(list)
+
+//clear_screen()
+
+//Repl.run()

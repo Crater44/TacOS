@@ -1,0 +1,42 @@
+ListPolyfills = {}
+
+ListPolyfills.map  = function(callback)
+	array_result = []
+	for i in range(0, (self.len -1))
+		result = callback(self[i])
+		self[i] = result
+		array_result.push(result)
+	end for
+	return array_result
+end function
+
+ListPolyfills.filter = function(callback)
+    filtered = []
+	for i in range(0, (self.len -1))
+		list_item = self[i]
+		if callback(list_item) then
+            filtered.push(list_item)
+        end if
+	end for
+	return filtered
+end function
+
+// ListPolyfills.findFirst = function(callback)
+//     for i in range(0, (self.len -1))
+// 		if callback(self[i]) then
+//             return self[i]
+//         end if
+// 	end for
+// end function
+
+ListPolyfills.includes = function(item)
+    for i in range(0, (self.len -1))
+		if item == self[i] then
+            return true
+        end if
+	end for
+end function
+
+for polyfill in ListPolyfills.indexes
+    list[polyfill] = @ListPolyfills[polyfill]
+end for

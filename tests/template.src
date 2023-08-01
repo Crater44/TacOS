@@ -1,0 +1,22 @@
+print("Importing source code:")
+
+import_code("source code")
+
+Test = {}
+
+Test.Cases = {
+    "": function()
+
+    end function
+}
+
+print("Running test cases: \n")
+
+results = ""
+for case in Test.Cases.indexes
+    Test.print(case)
+    if Test.Cases[case](case) then results = results + "." else results = results + "F"
+end for
+
+print("\n\n")
+Test.printBr(results)
