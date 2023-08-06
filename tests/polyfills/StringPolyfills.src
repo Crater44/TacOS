@@ -1,0 +1,15 @@
+import_code("../TestSuite")
+
+TestSuite.importSource(function()
+  import_code("../../polyfills/StringPolyfills.src")
+end function)
+
+TestSuite.runCases({
+  "Polyfill match should be autoloaded": function()
+    return TestSuite.objectHasProperty(string, "match")
+  end function,
+  "Polyfill match should return true if matches": function()
+    result = TestSuite.try("this is a test string", "match")
+    return TestSuite.shouldBeEqual()
+  end function
+})
