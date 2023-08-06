@@ -1,63 +1,90 @@
 TestSuite = {}
 
 TestSuite.importSource = function(callback)
-    print("Importing source code:")
-    callback()
-    print("OK \n")
+  print("Importing source code:")
+  callback()
+  print("OK \n")
 end function
 
 
 TestSuite.print = function(text)
-    print("    "+text)
+  print("  "+text)
 end function
 
 TestSuite.Errors = []
 
 TestSuite.fail = function(text)
-    // Todo color red
-    TestSuite.Errors.push("\n    X Test failed, reason: "+text)
-    return false
+  TestSuite.Errors.push("<color=red> \n  X Test failed, reason: "+text)
+  return false
 end function
 
 TestSuite.runCases = function(cases)
-    print("Running test cases: \n")
-    results = ""
-    for case in cases.indexes
-        TestSuite.print(case)
-        if cases[case]() then
-            results += "."
-        else
-            results += "F"
-        end if
-    end for
-    
-    print("\n\n")
+  print("Running test cases: \n")
+  results = ""
+  for case in cases.indexes
+    TestSuite.print(case)
+    if cases[case]() then
+      results += "."
+    else
+      results += "F"
+    end if
+  end for
+  
+  print("\n\n")
 
-    TestSuite.print(results+"\n")
+  TestSuite.print(results+"\n")
 
-    for err in TestSuite.Errors
-        TestSuite.print(err)
-    end for
-    
-    print("")
+  for err in TestSuite.Errors
+    TestSuite.print(err)
+  end for
+  
+  print("")
 end function
 
 TestSuite.shouldBeEqual = function(val_1, val_2)
-    if typeof(val_1) != typeof(val_2) then return TestSuite.fail("Types aren't equal")
+  if typeof(val_1) != typeof(val_2) then
+    err_msg = "Arg 1 type """+typeof(val_1)+""" but "+"Arg 2 type """+typeof(val_2)+""""
+    return TestSuite.fail(err_msg)
+  end if
 
-    if typeof(val_1) == "list" then
-        if val_1.len != val_2.len then return TestSuite.fail("The given arrays haven't the same length")
-        
-        // todo: make this a ckeck array function to check arrays in maps when making a deep equal object comparator
-        counter = 0
-        for v_1 in val_1
-            if v_1 != val_2[counter] then return TestSuite.fail("The given arrays haven't the same values")
-            // todo: show values by user_input ??? <----------------------------------------------------------------------
-            counter = counter + 1
-        end for
+  if typeof(val_1) == "string" and val_1 != val_2 then
+    return TestSuite.fail("Strings aren't equal")
+  end if
+  
+  if typeof(val_1) == "number" and val_1 != val_2 then
+    return TestSuite.fail("Numbers aren't equal")
+  end if
+  
+  if typeof(val_1) == "list" then
+    if val_1.len != val_2.len then
+      return TestSuite.fail("The given arrays don't have the same length")
     end if
 
-    return true
+    // todo: make this a ckeck array function to check arrays in maps
+    // when making a deep equal object comparator
+
+    counter = 0
+    for v_1 in val_1
+      if v_1 != val_2[counter] then
+        return TestSuite.fail("The given arrays haven't the same values")
+      end if
+      counter = counter + 1
+    end for
+  end if
+
+  return true
 end function
 
-TestSuite.shouldBeEqual([1, 2, 3], [1, 2, 2])
+TestSuite.objectHasProperty = function(obj, prop)
+  for index in obj.indexes
+    if index == prop then return true
+  end for
+  return TestSuite.fail("Object has no property: "+prop)
+end function
+
+TestSuite.tryMethod = function(obj, method, args = {})
+  
+end function
+
+TestSuite.tryMethod("this is a test string", "match")
+// TestSuite.shouldBeEqual([1, 2, 3], [1, 2, 2])
